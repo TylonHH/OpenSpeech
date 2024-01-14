@@ -11,10 +11,7 @@ Use your own openai api key and convert your text content to awesome spoken mp3 
 - Displays estimated cost to convert the text to speech
 - Overcomes openai 4096 character limit by splitting the text to chunks, generating separate audio files for each chunks and combining the final output into a single file.
 
-#### Collaborations
-- I am not a trained programmer. I put this together with the help of ai. So any help to make the application better or cleaner is welcome.
 
-(c) Binu Pradeep 2024
 
 #### Attributions
 - Python script I came across while browsing reddit
@@ -24,3 +21,9 @@ Use your own openai api key and convert your text content to awesome spoken mp3 
 - Chatgpt
 
 <a href="https://www.buymeacoffee.com/binuengoor" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
+---
+#### Collaborations
+- I am not a trained programmer. I put this together with the help of ai. So any help to make the application better or cleaner is welcome.
+
+(c) Binu Pradeep 2024
