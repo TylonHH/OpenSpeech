@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OpenSpeech - Text to Speech</title>
+    <link id="theme-style" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    <style>
+        :root {
+            --icon-color: black;
+        }
+        #theme-icon, .fas.fa-bullhorn {
+            color: var(--icon-color);
+        }
+        #theme-icon {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50; /* Change this to your preferred color */
+            color: white; /* Change this to your preferred color */
+        }
+        textarea, input[type="text"] {
+            background-color: #e6e6e6; /* Change this to your preferred color */
+            color: black; /* Change this to your preferred color */
+        }
+        label {
+            font-size: 1.2em; /* Adjust this to your preferred size */
+            font-weight: bold; /* Makes the text bold */
+        }
+        #sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 200px; /* Adjust as needed */
+            background-color: transparent; /* Adjust as needed */
+            padding: 20px;
+            overflow-y: auto;
+            transition: width 0.5s ease, visibility 0.5s ease;
+        }
+        #sidebar.collapsed #sidebar-content {
+            visibility: hidden;
+        }
+        #collapse-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* Add other styles as needed */
+        }
+        form {
+            padding-left: 130px; /* Adjust this value as needed */
+            padding-right: 20px; /* Adjust this value as needed */
+        }
+        h1 {
+            padding-left: 130px; /* Adjust this value as needed */
+            padding-right: 20px; /* Adjust this value as needed */
+        }
+        .smaller-text {
+            font-size: 0.6em; /* Adjust this value as needed */
+        }
+        .filter-section {
+            margin-bottom: 20px;
+        }
+        .filter-section label {
+            font-weight: normal;
+        }
+        .more-info {
+            display: inline-block;
+            padding: 5px 10px; /* Smaller padding */
+            font-size: 0.8em; /* Smaller font size */
+            color: white;
+            background-color: #a3a3a3; /* Change this to your preferred color */
+            text-decoration: none;
+            text-align: center;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port + '/logs');
+        socket.on('log', function(msg) {
+            // Update the UI with the log message
+            var logElement = document.getElementById('logs');
+            logElement.textContent += msg + '\n';
+        });
+
+
+        function updateCounter() {
+            var text = document.getElementById('text').value;
+            var counter = document.getElementById('counter');
+            counter.textContent = text.length + ' characters';
+
+            // Get the radio buttons
+            var modelStandard = document.getElementById('tts-1');
+            var modelHD = document.getElementById('tts-1-hd');
+
+            // Calculate cost
+            var cost = document.getElementById('cost');
+            var costPerThousand;
+            if (modelStandard.checked) {
+                costPerThousand = 0.015;
+            } else if (modelHD.checked) {
+                costPerThousand = 0.030;
+            }
+            var costValue = Math.ceil(text.length / 1000) * costPerThousand;
+            cost.textContent = 'Estimated cost: $' + costValue.toFixed(2);
+        }
+
+        // Update the cost when the page loads
+        updateCounter();
+
+        // Update the cost when the radio buttons or text area change
+        modelStandard.addEventListener('change', updateCounter);
+        modelHD.addEventListener('change', updateCounter);
+        document.getElementById('text').addEventListener('input', updateCounter);
+
+        function toggleTheme() {
+            var themeStyle = document.getElementById('theme-style');
+            var themeIcon = document.getElementById('theme-icon');
+            if (themeStyle.getAttribute('href') == 'https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css') {
+                themeStyle.href = 'https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css';
+                themeIcon.className = 'fas fa-sun';
+                document.documentElement.style.setProperty('--icon-color', 'white');
+            } else {
+                themeStyle.href = 'https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css';
+                themeIcon.className = 'fas fa-moon';
+                document.documentElement.style.setProperty('--icon-color', 'black');
+            }
+        }
+    </script>
+</head>
+<body>
+    <i id="theme-icon" class="fas fa-moon" onclick="toggleTheme()"></i>
+    <h1><i class="fas fa-bullhorn"></i> OpenSpeech <span class="smaller-text">Text to Speech</span></h1>
+    <form method="POST">
+        <div id="sidebar">
+          <button id="collapse-button"><i class="fas fa-bars"></i></button>
+          <h2></h2>
+          <div id="sidebar-content">
+            <div class="filter-section">
+                <h3>Voices:</h3>
+                <input type="radio" id="alloy" name="voice" value="alloy" required>
+                <label for="alloy">Alloy</label><br>
+                <input type="radio" id="echo" name="voice" value="echo">
+                <label for="echo">Echo</label><br>
+                <input type="radio" id="fable" name="voice" value="fable">
+                <label for="fable">Fable</label><br>
+                <input type="radio" id="onyx" name="voice" value="onyx" checked>
+                <label for="onyx">Onyx</label><br>
+                <input type="radio" id="nova" name="voice" value="nova">
+                <label for="nova">Nova</label><br>
+                <input type="radio" id="shimmer" name="voice" value="shimmer">
+                <label for="shimmer">Shimmer</label><br>
+            </div>
+            <div class="filter-section">
+                <h3>Model:</h3>
+                <input type="radio" id="tts-1" name="model" value="tts-1" required checked>
+                <label for="tts-1">Standard</label><br>
+                <input type="radio" id="tts-1-hd" name="model" value="tts-1-hd">
+                <label for="tts-1-hd">HD</label><br>
+            </div>
+            <a href="https://platform.openai.com/docs/guides/text-to-speech" target="_blank" class="more-info">
+                More Info<br>
+                &amp;<br>
+                Voice Previews
+            </a>
+            </div>
+        </div>
+        <div class="input-field">
+            <label for="api_key">OpenAI API Key:</label><br>
+            <input type="text" id="api_key" name="api_key" required><br>
+        </div>
+        <div class="input-field">
+            <label for="text">Enter your text:</label><br>
+            <textarea id="text" name="text" rows="10" cols="50" oninput="updateCounter()" required></textarea><br>
+            <span id="counter">0 characters</span><br>
+            <span id="cost">Estimated cost: $0.00</span><br>
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+    <script>
+        var sidebar = document.getElementById('sidebar');
+        var collapseButton = document.getElementById('collapse-button');
+        collapseButton.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+        });
+    </script>
+    <pre id="logs"></pre>
+</body>
+</html>
