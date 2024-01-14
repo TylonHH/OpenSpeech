@@ -1,0 +1,11 @@
+---
+version: "3.4"
+services:
+  openspeech:
+    image: ghcr.io/binuengoor/openspeech:main
+    container_name: openspeech
+    ports:
+      - 3210:3210
+    volumes:
+      - /path/to/files:/app/files
+    restart: unless-stopped
