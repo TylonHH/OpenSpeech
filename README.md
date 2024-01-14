@@ -10,6 +10,8 @@ Use your own openai api key and convert your text content to awesome spoken mp3 
 - Filter different voices and quality levels supported by openai
 - Displays estimated cost to convert the text to speech
 - Overcomes openai 4096 character limit by splitting the text to chunks, generating separate audio files for each chunks and combining the final output into a single file.
+##### Screenshot
+![Screenshot](images/OpenSpeech_Screenshot.png)
 
 #### Installation and Usage
 ##### Docker
