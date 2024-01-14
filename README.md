@@ -23,7 +23,10 @@ Use your own openai api key and convert your text content to awesome spoken mp3 
 <a href="https://www.buymeacoffee.com/binuengoor" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
 ---
-#### Collaborations
-- I am not a trained programmer. I put this together with the help of ai. So any help to make the application better or cleaner is welcome.
+#### Contributing
+- Contributions are welcome! I am not a trained programmer. I put this together with the help of ai. So any help to make the application better or cleaner is welcome.
+
+#### License
+This project is licensed under the terms of the MIT license.
 
 (c) Binu Pradeep 2024
